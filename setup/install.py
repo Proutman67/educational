@@ -4,7 +4,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-APP_NAME = "SecutiryServices"
+APP_NAME = "SecurityServices"
 INSTALL_DIR = os.path.join(os.environ["ProgramFiles"], APP_NAME)
 
 SYSTEM_TASK_NAME = "MyApp_SystemAgent"
