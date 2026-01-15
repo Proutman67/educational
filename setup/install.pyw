@@ -12,11 +12,11 @@ USER_TASK_NAME = "MyApp_UserAgent"
 PYTHON_EXE = sys.executable
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-SYSTEM_SRC = os.path.join(BASE_DIR, "system_agent.py")
-USER_SRC = os.path.join(BASE_DIR, "user_agent.py")
+SYSTEM_SRC = os.path.join(BASE_DIR, "system_agent.pyw")
+USER_SRC = os.path.join(BASE_DIR, "user_agent.pyw")
 
-SYSTEM_DST = os.path.join(INSTALL_DIR, "system_agent.py")
-USER_DST = os.path.join(INSTALL_DIR, "user_agent.py")
+SYSTEM_DST = os.path.join(INSTALL_DIR, "system_agent.pyw")
+USER_DST = os.path.join(INSTALL_DIR, "user_agent.pyw")
 
 # ---- CREATE INSTALL DIRECTORY ----
 os.makedirs(INSTALL_DIR, exist_ok=True)
