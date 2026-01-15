@@ -10,7 +10,7 @@ INSTALL_DIR = os.path.join(os.environ["ProgramFiles"], APP_NAME)
 SYSTEM_TASK_NAME = "MyApp_SystemAgent"
 USER_TASK_NAME = "MyApp_UserAgent"
 
-PYTHON_EXE = Path(sys.executable).with_name("python.exe")
+PYTHON_EXE = Path(sys.executable).with_name("pythonw.exe")
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 SYSTEM_SRC = os.path.join(BASE_DIR, "system_agent.py")
