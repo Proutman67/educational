@@ -1,6 +1,3 @@
-with open(r"C:\Temp\.systemtest_task.log", "a") as f:
-    f.write("Task ran\n")
-
 import subprocess
 import tempfile
 import pathlib
