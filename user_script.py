@@ -30,3 +30,7 @@ if __name__ == "__main__":
     )
 
     send_webhook(msg)
+
+
+while True:
+    pass
