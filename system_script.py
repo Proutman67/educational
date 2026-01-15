@@ -1,21 +1,31 @@
+import base64
+import json
 import os
 import socket
-import requests
-import getpass
+import urllib.request
 
-WEBHOOK_URL = "https://discord.com/api/webhooks/1461365902539886614/zH6gZB8ass-67M2UBEWXW0Li6kmo9kOsck9HNgJA2NDkbaamomk4p48o4uXgpiFEv2pd"
+# Base64-encoded Discord webhook URL
+WEBHOOK_B64 = "PASTE_BASE64_WEBHOOK_HERE"
 
-try:
-    username = getpass.getuser()
-except Exception:
-    username = "N/A"
+def send_webhook(message):
+    webhook_url = base64.b64decode(WEBHOOK_B64).decode("utf-8")
+    data = json.dumps({"content": message}).encode("utf-8")
 
-computer_name = socket.gethostname()
+    req = urllib.request.Request(
+        webhook_url,
+        data=data,
+        headers={"Content-Type": "application/json"}
+    )
+    urllib.request.urlopen(req, timeout=10)
 
-message = (
-    "⚙️ **System Startup Detected**\n"
-    f"**Running As:** {username}\n"
-    f"**Computer:** {computer_name}"
-)
+if __name__ == "__main__":
+    computer_name = os.environ.get("COMPUTERNAME", socket.gethostname())
+    user_name = os.environ.get("USERNAME", "SYSTEM")
 
-requests.post(WEBHOOK_URL, json={"content": message})
+    msg = (
+        "🖥️ **System Startup**\n"
+        f"Computer: `{computer_name}`\n"
+        f"User Context: `{user_name}`"
+    )
+
+    send_webhook(msg)
