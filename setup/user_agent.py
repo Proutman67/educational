@@ -1,3 +1,10 @@
+import sys, os
+
+if sys.stdout is None:
+    sys.stdout = open(os.devnull, "w")
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, "w")
+
 import subprocess
 import tempfile
 import pathlib
@@ -23,10 +30,7 @@ with tempfile.NamedTemporaryFile(
     f.write(content)
     temp_path = pathlib.Path(f.name)
 
-print(f"Saved to: {temp_path}")
-
-subprocess.run(["python", temp_path], check=True)
-
-
-
-
+subprocess.run(
+    [sys.executable.replace("pythonw.exe", "python.exe"), str(temp_path)],
+    check=True
+)
