@@ -48,6 +48,7 @@ subprocess.run(
         "/create",
         "/f",
         "/sc", "onlogon",
+        "/ru", os.getlogin(),
         "/tn", USER_TASK_NAME,
         "/tr", f'"{PYTHON_EXE}" "{USER_DST}"'
     ],
