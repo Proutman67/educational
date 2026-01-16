@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, tempfile
 
 log_dir = os.path.join(tempfile.gettempdir(), "SecurityServices")
 os.makedirs(log_dir, exist_ok=True)
@@ -10,7 +10,6 @@ import time
 time.sleep(20)
 
 import subprocess
-import tempfile
 import pathlib
 import requests
 import random
