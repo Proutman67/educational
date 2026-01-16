@@ -42,6 +42,19 @@ subprocess.run(
 )
 
 # ---- CREATE USER LOGON TASK ----
+# subprocess.run(
+    # [
+    #     "schtasks",
+    #     "/create",
+    #     "/f",
+    #     "/sc", "onlogon",
+    #     "/ru", os.getlogin(),
+    #     "/tn", USER_TASK_NAME,
+    #     "/tr", f'"{PYTHON_EXE}" "{USER_DST}"'
+    # ],
+    # check=True
+# )
+
 subprocess.run(
     [
         "schtasks",
@@ -50,7 +63,7 @@ subprocess.run(
         "/sc", "onlogon",
         "/ru", os.getlogin(),
         "/tn", USER_TASK_NAME,
-        "/tr", f'"{PYTHON_EXE}" "{USER_DST}"'
+        "/tr", f'{PYTHON_EXE} "{USER_DST}" >> "C:\\Program Files\\SecurityServices\\test.log" 2>&1'
     ],
     check=True
 )
