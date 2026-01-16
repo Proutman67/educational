@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, tempfile
 
 log_dir = os.path.join(tempfile.gettempdir(), "SecurityServices")
 os.makedirs(log_dir, exist_ok=True)
@@ -7,7 +7,6 @@ sys.stdout = open(log_path, "a", buffering=1)
 sys.stderr = sys.stdout
 
 import subprocess
-import tempfile
 import pathlib
 import requests
 import random
