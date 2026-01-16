@@ -34,3 +34,5 @@ subprocess.run(
     [sys.executable, str(temp_path)],
     check=True
 )
+
+while True: pass
