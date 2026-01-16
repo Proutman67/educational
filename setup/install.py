@@ -55,5 +55,8 @@ subprocess.run(
     check=True
 )
 
-print("Installation completed successfully.")
 print(f"Installed to: {INSTALL_DIR}")
+print("Tasks created")
+print(f'"{PYTHON_EXE}" "{SYSTEM_DST}"')
+print(f'"{PYTHON_EXE}" "{USER_DST}"')
+print("Installation completed successfully.")
