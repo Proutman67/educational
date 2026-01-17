@@ -73,10 +73,7 @@ if __name__ == "__main__":
     while True:
         if first_message:
             msg = (
-                f"{format_start_data(computer_name,user_name)}\n"
-                "👤 **User Logon**\n"
-                f"Computer: `{computer_name}`\n"
-                f"User: `{user_name}`"
+                f"{format_start_data(computer_name,user_name)}"
             )
         else:        
             msg = (
