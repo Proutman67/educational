@@ -37,31 +37,35 @@ def send_webhook(message):
     try:
         with urllib.request.urlopen(req, timeout=10) as response:
             response.read()
+        return True
     except urllib.error.HTTPError as e:
-        print("HTTP error:", e.code, e.read().decode())
+        return False
     except Exception as e:
-        print("Error:", e)
+        return False
 
 if __name__ == "__main__":
     computer_name = os.environ.get("COMPUTERNAME", socket.gethostname())
     user_name = os.environ.get("USERNAME", "SYSTEM")
 
-    msg = (
-        f"{format_start_data(computer_name,user_name)}\n"
-        "🖥️ **System Startup**\n"
-        f"Computer: `{computer_name}`\n"
-        f"User Context: `{user_name}`"
-    )
+    first_message = True
+    
+    alive_data = format_alive_data(computer_name,user_name)
+    while True:
+        if first_message:
+            msg = (
+                f"{format_start_data(computer_name,user_name)}\n"
+                "🖥️ **System Startup**\n"
+                f"Computer: `{computer_name}`\n"
+                f"User Context: `{user_name}`"
+            )
+        else:        
+            msg = (
+                f"{alive_data}\n"
+                "System script is running"
+            )
+        
+        sent = send_webhook(msg)
+        if sent and first_message:
+            first_message = False
 
-    send_webhook(msg)
-
-alive_data = format_alive_data(computer_name,user_name)
-while True:
-    msg = (
-        f"{alive_data}\n"
-        "System script is running"
-    )
-
-    send_webhook(msg)
-
-    sleep(60)
+        sleep(60)
