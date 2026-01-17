@@ -47,7 +47,7 @@ if __name__ == "__main__":
     user_name = os.environ.get("USERNAME", "SYSTEM")
 
     msg = (
-        f"{format_start_data(computer_name,user_name)}"
+        f"{format_start_data(computer_name,user_name)}\n"
         "🖥️ **System Startup**\n"
         f"Computer: `{computer_name}`\n"
         f"User Context: `{user_name}`"
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 alive_data = format_alive_data(computer_name,user_name)
 while True:
     msg = (
-        f"{alive_data}"
+        f"{alive_data}\n"
         "System script is running"
     )
 
