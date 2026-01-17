@@ -6,6 +6,9 @@ log_path = os.path.join(log_dir, "debug.log")
 sys.stdout = open(log_path, "a", buffering=1)
 sys.stderr = sys.stdout
 
+import time
+time.sleep(100)
+
 import subprocess
 import pathlib
 import requests
