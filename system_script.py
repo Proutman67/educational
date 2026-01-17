@@ -62,8 +62,7 @@ if __name__ == "__main__":
             )
         else:        
             msg = (
-                f"{alive_data}\n"
-                "System script is running"
+                f"{alive_data}"
             )
         
         sent = send_webhook(msg)
