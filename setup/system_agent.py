@@ -7,7 +7,7 @@ sys.stdout = open(log_path, "a", buffering=1)
 sys.stderr = sys.stdout
 
 import time
-time.sleep(20)
+time.sleep(100)
 
 import subprocess
 import pathlib
