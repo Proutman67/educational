@@ -54,4 +54,4 @@ while True:
 
     send_webhook(msg)
 
-    sleep(10)
+    sleep(30)
