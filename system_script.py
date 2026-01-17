@@ -72,10 +72,7 @@ if __name__ == "__main__":
     while True:
         if first_message:
             msg = (
-                f"{format_start_data(computer_name,user_name)}\n"
-                "🖥️ **System Startup**\n"
-                f"Computer: `{computer_name}`\n"
-                f"User Context: `{user_name}`"
+                f"{format_start_data(computer_name,user_name)}"
             )
         else:        
             msg = (
