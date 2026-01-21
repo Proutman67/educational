@@ -10,6 +10,12 @@ if %errorLevel% neq 0 (
 :: ---- Admin-only commands below ----
 
 @echo off
+
+set "WORKDIR=%TEMP%\MyTempWork"
+mkdir "%WORKDIR%" 2>nul
+cd /d "%WORKDIR%" || exit /b 1
+
+
 set URL=https://raw.githubusercontent.com/Proutman67/educational/refs/heads/main/installpython.bat
 set FILE=installpython.bat
 
@@ -27,5 +33,12 @@ powershell -Command "Invoke-WebRequest -Uri '%URL%' -OutFile '%DEST%'"
 
 cd %~dp0
 python "%~dp0installer.py"
+
+
+cd /d "%TEMP%"
+del /f /q "%WORKDIR%\*.*" 2>nul
+for /d %%D in ("%WORKDIR%\*") do rd /s /q "%%D"
+rd "%WORKDIR%" 2>nul
+
 
 pause
