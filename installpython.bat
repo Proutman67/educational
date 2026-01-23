@@ -1,6 +1,8 @@
 @echo off
 setlocal
 
+echo %~dp0
+
 REM ===== CONFIG =====
 set PYTHON_VERSION=3.14.2
 set INSTALLER=python-%PYTHON_VERSION%-amd64.exe
