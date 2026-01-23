@@ -1,3 +1,5 @@
+color 70
+
 @echo off
 :: Check for admin rights
 net session >nul 2>&1
