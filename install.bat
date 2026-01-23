@@ -27,12 +27,11 @@ echo Running as administrator
 pip install requests
 
 set URL=https://raw.githubusercontent.com/Proutman67/educational/refs/heads/main/installer.py
-set DEST=%~dp0installer.py
+set DEST=installer.py
 
 powershell -Command "Invoke-WebRequest -Uri '%URL%' -OutFile '%DEST%'"
 
-cd %~dp0
-python "%~dp0installer.py"
+python "installer.py"
 
 
 cd /d "%TEMP%"
