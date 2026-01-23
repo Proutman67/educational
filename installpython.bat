@@ -16,11 +16,14 @@ if %errorlevel% neq 0 (
 
 REM ===== CHECK IF PYTHON EXISTS =====
 where python >nul 2>&1
-if %errorlevel% equ 0 (
+if errorlevel 1 (
+    echo Python is NOT installed.
+) else (
     echo Python is already installed.
     python --version
     goto :eof
 )
+
 
 REM ===== DOWNLOAD INSTALLER =====
 echo Downloading Python %PYTHON_VERSION%...
