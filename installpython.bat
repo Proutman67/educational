@@ -15,12 +15,13 @@ if %errorlevel% neq 0 (
 )
 
 REM ===== CHECK IF PYTHON EXISTS =====
-where python >nul 2>&1
+where pip >nul 2>&1
 if errorlevel 1 (
     echo Python is NOT installed.
 ) else (
     echo Python is already installed.
     python --version
+    pip --version
     goto :eof
 )
 
