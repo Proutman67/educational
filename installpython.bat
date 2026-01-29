@@ -34,6 +34,8 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
+timeout 2
+
 REM ===== INSTALL PYTHON =====
 echo Installing Python...
 start "" "%~dp0/%INSTALLER%" /quiet InstallAllUsers=1 PrependPath=1 Include_test=0 SimpleInstall=1
