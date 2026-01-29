@@ -3,7 +3,7 @@ setlocal
 
 REM ===== CONFIG =====
 set PYTHON_VERSION=3.14.2
-set INSTALLER=%~dp0\python-%PYTHON_VERSION%-amd64.exe
+set INSTALLER=python-%PYTHON_VERSION%-amd64.exe
 set DOWNLOAD_URL=https://www.python.org/ftp/python/%PYTHON_VERSION%/%INSTALLER%
 
 REM ===== CHECK ADMIN =====
@@ -36,12 +36,7 @@ if %errorlevel% neq 0 (
 
 REM ===== INSTALL PYTHON =====
 echo Installing Python...
-"%INSTALLER%" ^
- /quiet ^
- InstallAllUsers=1 ^
- PrependPath=1 ^
- Include_test=0 ^
- SimpleInstall=1
+start "" "%~dp0/%INSTALLER%" /quiet InstallAllUsers=1 PrependPath=1 Include_test=0 SimpleInstall=1
 
 REM ===== CLEANUP =====
 del "%INSTALLER%"
