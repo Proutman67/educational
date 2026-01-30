@@ -34,7 +34,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-timeout 2
+timeout 5
 
 REM ===== INSTALL PYTHON =====
 echo Installing Python...
