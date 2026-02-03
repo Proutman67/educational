@@ -1,5 +1,6 @@
 @echo off
 setlocal
+color 70
 
 REM ===== CONFIG =====
 set PYTHON_VERSION=3.14.2
