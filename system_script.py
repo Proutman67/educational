@@ -6,6 +6,7 @@ import socket
 import urllib.request
 from time import sleep
 
+import win32com.client
 import subprocess
 import re
 
@@ -39,27 +40,29 @@ def encrypt(text: str) -> str:
     encrypted = encrypted.replace("==","-°").replace("=","_")
 
     return encrypted
-
+ 
 def get_logged_in_user():
     """
-    Returns the active logged-in username in DOMAIN\\User or User format.
+    Returns one interactive logged-in user (DOMAIN\\User).
     Returns None if no interactive user is logged in.
     """
     try:
-        output = subprocess.check_output(
-            ["query", "user"],
-            stderr=subprocess.DEVNULL,
-            text=True
+        wmi = win32com.client.GetObject("winmgmts:")
+        sessions = wmi.ExecQuery(
+            "SELECT * FROM Win32_LogonSession WHERE LogonType = 2 OR LogonType = 10"
         )
-
-        for line in output.splitlines():
-            if "Active" in line:
-                parts = re.split(r"\s+", line.strip())
-                return parts[0]
-
+ 
+        for session in sessions:
+            assoc = wmi.ExecQuery(
+                f"ASSOCIATORS OF {{Win32_LogonSession.LogonId='{session.LogonId}'}} "
+                "WHERE AssocClass=Win32_LoggedOnUser"
+            )
+            for user in assoc:
+                return f"{user.Domain}\\{user.Name}"
+ 
     except Exception:
         pass
-
+ 
     return None
 
 def send_webhook(message):
