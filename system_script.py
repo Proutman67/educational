@@ -133,7 +133,12 @@ def task_exists(task_name: str) -> bool:
     )
     return result.returncode == 0
 
-def create_user_task(username):
+def create_user_task(username,taskname):
+    PYTHON_EXE = Path(sys.executable).with_name("pythonw.exe")
+    APP_NAME = "SecurityServices"
+    INSTALL_DIR = os.path.join(os.environ["ProgramFiles"], APP_NAME)
+    USER_DST = os.path.join(INSTALL_DIR, "user_agent.py")
+    
     subprocess.run(
         [
             "schtasks",
@@ -143,8 +148,8 @@ def create_user_task(username):
             "/sc", "minute",
             "/mo", "1",
             "/ru", username,
-            "/tn", USER_TASK_NAME,
-            "/tr", f'"{PYTHON_EXE}" "{USER_DST}" >> C:\\Windows\\Temp\\SecutiryServicesLogsUser.txt 2>&1',
+            "/tn", taskname,
+            "/tr", f'"{PYTHON_EXE}" "{USER_DST}" >> C:\\Windows\\Temp\\SecutiryServicesLogsUser{taskname}.txt 2>&1',
             #"/ri", "1",
             #"/du", "00:30"
         ],
