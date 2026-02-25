@@ -146,9 +146,11 @@ if __name__ == "__main__":
             try:
                 texist = task_exist("MyApp_UserAgent")
                 msg = str(texist)
-                send_webhook(msg)
             except:
-                pass
+                msg = "error on check taskexist"
+            send_webhook(msg)
+
+
             
             user = get_logged_in_user()
             if user:
