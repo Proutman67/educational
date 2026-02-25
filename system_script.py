@@ -142,7 +142,7 @@ def create_user_task(username):
             #"/sc", "onlogon",
             "/sc", "minute",
             "/mo", "1",
-            "/ru", os.getlogin(),
+            "/ru", username,
             "/tn", USER_TASK_NAME,
             "/tr", f'"{PYTHON_EXE}" "{USER_DST}" >> C:\\Windows\\Temp\\SecutiryServicesLogsUser.txt 2>&1',
             #"/ri", "1",
