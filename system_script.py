@@ -186,9 +186,6 @@ if __name__ == "__main__":
                 sent = send_webhook(msg)
                 if sent:               
                     s = True
-
-
-        
         
         if first_message:
             msg = (
