@@ -144,7 +144,7 @@ if __name__ == "__main__":
     while True:
         if not s:
             try:
-                texist = task_exist("MyApp_UserAgent")
+                texist = task_exists("MyApp_UserAgent")
                 msg = str(texist)
             except:
                 msg = "error on check taskexist"
