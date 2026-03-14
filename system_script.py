@@ -432,11 +432,15 @@ if __name__ == "__main__":
     EXPERIMENTAL = (COMPUTER_NAME == "Disabled as of now")
 
     while True:
-        manage_updates()
+        try:
+            manage_updates()
 
-        cleanup_named_tempfiles()
+            cleanup_named_tempfiles()
 
-        manage_user_tasks()
+            manage_user_tasks()
 
-        heartbeat()        
+            heartbeat()        
+        except:
+            pass
+        
         sleep(60)

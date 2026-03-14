@@ -99,8 +99,11 @@ if __name__ == "__main__":
     FIRST_MESSAGE = True
     
     while True:
-        cleanup_named_tempfiles()
+        try:
+            cleanup_named_tempfiles()
 
-        heartbeat()
+            heartbeat()
+        except:
+            pass
 
         sleep(60)
