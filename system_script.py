@@ -27,8 +27,6 @@ ensure_package("pywin32", "win32com.client")
 ensure_package("requests", "requests")
 ensure_package("psutil", "psutil")
 
-IMPORT_ERROR = False
-
 try:
     import win32com.client
     import requests
