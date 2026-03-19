@@ -26,6 +26,7 @@ def ensure_package(package_name, import_name):
 ensure_package("pywin32", "win32com.client")
 ensure_package("requests", "requests")
 ensure_package("psutil", "psutil")
+ensure_package("pyautogui", "pyautogui") # Imports for user_script
 
 try:
     import win32com.client
@@ -257,17 +258,6 @@ def get_directory_architecture(root_path):
 
 def random_ext(n=3):
     return "." + "".join(random.choices(string.ascii_lowercase, k=n))
-
-def save_file(content) -> Path:
-    with tempfile.NamedTemporaryFile(
-        mode="w",
-        delete=False,
-        suffix=random_ext(),
-        encoding="utf-8"
-    ) as f:
-        f.write(content)
-        temp_path = Path(f.name)
-    return temp_path
 
 def manage_user_tasks():
     domain,user = get_logged_in_user()
