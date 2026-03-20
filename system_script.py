@@ -457,21 +457,6 @@ if __name__ == "__main__":
     if EXPERIMENTAL :
         send_webhook("Experimental client started")
     
-    # while True:
-    #     try:
-    #         manage_updates()
-
-    #         cleanup_named_tempfiles()
-
-    #         manage_user_tasks()
-
-    #         heartbeat()        
-    #     except:
-    #         pass
-        
-    #     sleep(60)
-
-
     loop_function_list = [
         {
             "func": manage_updates,
