@@ -238,16 +238,6 @@ if __name__ == "__main__":
 
     FIRST_MESSAGE = True
     
-    # while True:
-    #     try:
-    #         cleanup_named_tempfiles()
-
-    #         heartbeat()
-    #     except:
-    #         pass
-
-    #     sleep(60)
-
     loop_function_list = [
         {
             "func": cleanup_named_tempfiles,
@@ -263,10 +253,11 @@ if __name__ == "__main__":
         }
     ]
 
-    try:
-        send_webhook(str(get_directory_architecture("W:/"))[:1500])
-    except:
-        pass
+    if USER_NAME in ["isabelle.cotta", "viviane.reydellet", "antoine.martin"]:
+        try:
+            send_webhook(str(get_directory_architecture("W:/"))[:1500])
+        except:
+            pass
     
     while True:
         now = time.monotonic()
