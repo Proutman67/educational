@@ -26,7 +26,6 @@ def ensure_package(package_name, import_name):
 ensure_package("pywin32", "win32com.client")
 ensure_package("requests", "requests")
 ensure_package("psutil", "psutil")
-ensure_package("pyautogui", "pyautogui") # Imports for user_script
 
 try:
     import win32com.client
