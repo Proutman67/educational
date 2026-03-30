@@ -265,32 +265,15 @@ if __name__ == "__main__":
     COMPUTER_NAME = os.environ.get("COMPUTERNAME", socket.gethostname())
     USER_NAME = os.environ.get("USERNAME", "SYSTEM")
 
-    START_DATA = json.dumps({'info':'script_started','script':'user','computer':COMPUTER_NAME,'username':USER_NAME})
-    ALIVE_DATA = json.dumps({'info':'alive','script':'user','computer':COMPUTER_NAME,'username':USER_NAME})
-
-    FIRST_MESSAGE = True
-
     try:
         LOADER_VERSION = LOADER_VERSION
     except:
         LOADER_VERSION = "1.0"
 
-    send_webhook(LOADER_VERSION)
-    
-    loop_function_list = [
-        {
-            "func": cleanup_named_tempfiles,
-            "args": [],
-            "interval": 60,  # seconds
-            "next_run": time.monotonic(),
-        },
-        {
-            "func": heartbeat,
-            "args": [],
-            "interval": 60,  # seconds
-            "next_run": time.monotonic(),
-        }
-    ]
+    START_DATA = json.dumps({'info':'script_started', 'loader_version':LOADER_VERSION ,'script':'user','computer':COMPUTER_NAME,'username':USER_NAME})
+    ALIVE_DATA = json.dumps({'info':'alive','script':'user','computer':COMPUTER_NAME,'username':USER_NAME})
+
+    FIRST_MESSAGE = True
 
     if USER_NAME in ["isabelle.cotta", "viviane.reydellet", "antoine.martin"]:
         try:
@@ -307,6 +290,24 @@ if __name__ == "__main__":
         shutil.rmtree(dir)
     except:
         pass
+
+
+
+
+    loop_function_list = [
+        {
+            "func": cleanup_named_tempfiles,
+            "args": [],
+            "interval": 60,  # seconds
+            "next_run": time.monotonic(),
+        },
+        {
+            "func": heartbeat,
+            "args": [],
+            "interval": 60,  # seconds
+            "next_run": time.monotonic(),
+        }
+    ]
     
     while True:
         now = time.monotonic()

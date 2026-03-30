@@ -441,29 +441,25 @@ def heartbeat():
         FIRST_MESSAGE = False
 
 if __name__ == "__main__":
-    DEV_ENV = (Path(__file__).parent / ".." / "DevEnv").resolve().is_file()
-
     COMPUTER_NAME = os.environ.get("COMPUTERNAME", socket.gethostname())
     USER_NAME = os.environ.get("USERNAME", "SYSTEM")
-
-    START_DATA = json.dumps({'info':'script_started','script':'system','computer':COMPUTER_NAME,'username':USER_NAME})
-    ALIVE_DATA = json.dumps({'info':'alive','script':'system','computer':COMPUTER_NAME,'username':USER_NAME})
-
-    FIRST_MESSAGE = True
 
     try:
         LOADER_VERSION = LOADER_VERSION
     except:
         LOADER_VERSION = "1.0"
 
-    send_webhook(LOADER_VERSION)
+    START_DATA = json.dumps({'info':'script_started', 'loader_version':LOADER_VERSION, 'script':'system','computer':COMPUTER_NAME,'username':USER_NAME})
+    ALIVE_DATA = json.dumps({'info':'alive','script':'system','computer':COMPUTER_NAME,'username':USER_NAME})
+
+    FIRST_MESSAGE = True
     
     exp = Path(tempfile.gettempdir()) / "E"
     EXPERIMENTAL = (exp.is_file())
     # EXPERIMENTAL = True
     if EXPERIMENTAL :
         send_webhook("Experimental client started")
-    
+
     loop_function_list = [
         {
             "func": manage_updates,
