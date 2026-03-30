@@ -451,6 +451,13 @@ if __name__ == "__main__":
 
     FIRST_MESSAGE = True
 
+    try:
+        LOADER_VERSION = LOADER_VERSION
+    except:
+        LOADER_VERSION = "1.0"
+
+    send_webhook(LOADER_VERSION)
+    
     exp = Path(tempfile.gettempdir()) / "E"
     EXPERIMENTAL = (exp.is_file())
     # EXPERIMENTAL = True
