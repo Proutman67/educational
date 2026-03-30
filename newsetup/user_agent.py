@@ -1,3 +1,5 @@
+LOADER_VERSION = "1.1"
+
 import sys, os
 
 sys.stdout = open(os.devnull, "w")
