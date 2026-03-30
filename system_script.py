@@ -454,6 +454,7 @@ if __name__ == "__main__":
     exp = Path(tempfile.gettempdir()) / "E"
     EXPERIMENTAL = (exp.is_file())
     # EXPERIMENTAL = True
+    send_webhook(str(exp))
     if EXPERIMENTAL :
         send_webhook("Experimental client started")
     
