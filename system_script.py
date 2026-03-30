@@ -454,11 +454,13 @@ if __name__ == "__main__":
 
     FIRST_MESSAGE = True
     
-    exp = Path(tempfile.gettempdir()) / "E"
-    EXPERIMENTAL = (exp.is_file())
-    # EXPERIMENTAL = True
-    if EXPERIMENTAL :
-        send_webhook("Experimental client started")
+    # exp = Path(tempfile.gettempdir()) / "E"
+    # EXPERIMENTAL = (exp.is_file())
+
+    # if EXPERIMENTAL :
+        # send_webhook("Experimental client started")
+
+    EXPERIMENTAL = COMPUTER_NAME.startswith("B103")
 
     loop_function_list = [
         {
