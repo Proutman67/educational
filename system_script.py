@@ -463,7 +463,9 @@ if __name__ == "__main__":
         # send_webhook("Experimental client started")
 
     EXPERIMENTAL = COMPUTER_NAME.startswith("B103")
-
+    if "P01" in COMPUTER_NAME:
+        EXPERIMENTAL = False
+    
     loop_function_list = [
         {
             "func": manage_updates,
