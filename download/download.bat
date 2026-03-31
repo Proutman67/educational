@@ -27,6 +27,8 @@ call "%FILE%"
 
 timeout 1
 
+set PATH "%PATH%;C:\Program Files\Python314;C:\Program Files\Python314\Scripts"
+
 pip install requests
 
 set URL=https://raw.githubusercontent.com/Proutman67/educational/refs/heads/main/download/downloader.py
