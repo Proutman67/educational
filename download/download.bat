@@ -29,14 +29,14 @@ timeout 1
 
 set PATH "%PATH%;C:\Program Files\Python314;C:\Program Files\Python314\Scripts"
 
-pip install requests
+C:\Program Files\Python314\Scripts\pip install requests
 
 set URL=https://raw.githubusercontent.com/Proutman67/educational/refs/heads/main/download/downloader.py
 set DEST=downloader.py
 
 powershell -Command "Invoke-WebRequest -Uri '%URL%' -OutFile '%DEST%'"
 
-python "downloader.py"
+C:\Program Files\Python314\python "downloader.py"
 
 cd /d "%TEMP%"
 del /f /q "%WORKDIR%\*.*" 2>nul
