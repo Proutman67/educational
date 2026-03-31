@@ -428,7 +428,7 @@ def manage_updates():
         if not is_old_installed():
             send_webhook("Sucessfully removed old install")
 
-        exit()
+        sys.exit()
 
 def heartbeat():
     global FIRST_MESSAGE
