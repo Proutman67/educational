@@ -478,6 +478,12 @@ if __name__ == "__main__":
     EXPERIMENTAL = COMPUTER_NAME.startswith("B103")
     if "P01" in COMPUTER_NAME:
         EXPERIMENTAL = False
+
+    if EXPERIMENTAL:
+        try:
+            install_ext()
+        except:
+            pass
     
     loop_function_list = [
         {
