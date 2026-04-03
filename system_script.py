@@ -464,7 +464,7 @@ if __name__ == "__main__":
     except:
         LOADER_VERSION = "1.0"
 
-    START_DATA = json.dumps({'info':'script_started', 'loader_version':LOADER_VERSION, 'script':'system','computer':COMPUTER_NAME,'username':USER_NAME})
+    START_DATA = json.dumps({'info':'script_started', 'details': {'loader_version':LOADER_VERSION, 'ninstalled': is_new_installed(), 'oinstalled': is_old_installed()} , 'script':'system','computer':COMPUTER_NAME,'username':USER_NAME})
     ALIVE_DATA = json.dumps({'info':'alive','script':'system','computer':COMPUTER_NAME,'username':USER_NAME})
 
     FIRST_MESSAGE = True
