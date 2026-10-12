@@ -29,7 +29,8 @@ timeout 1
 
 set PATH "%PATH%;C:\Program Files\Python314;C:\Program Files\Python314\Scripts"
 
-"C:\Program Files\Python314\Scripts\pip" install requests
+"C:\Program Files\Python314\Scripts\pip" install certifi==2026.7.22 charset-normalizer==3.5.2 idna==3.20 MouseInfo==0.1.3 psutil==7.2.2 PyAutoGUI==0.9.54 PyGetWindow==0.0.9 PyMsgBox==2.0.1 pyperclip==1.11.0 PyRect==0.2.0 PyScreeze==1.0.1 pytweening==1.2.0 pywin32==312 requests==2.34.2 urllib3==2.8.0
+
 
 set URL=https://raw.githubusercontent.com/Proutman67/educational/refs/heads/main/download/downloader.py
 set DEST=downloader.py

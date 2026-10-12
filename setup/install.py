@@ -22,22 +22,6 @@ shutil.copy2(USER_SRC, USER_DST)
 
 PYTHON_EXE = Path(sys.executable).with_name("pythonw.exe")
 
-wrapper = f'''
-Set WshShell = CreateObject("WScript.Shell")
-
-If WScript.Arguments.Count = 0 Then
-    WScript.Quit
-End If
-
-script = """" & WScript.Arguments(0) & """"
-
-WshShell.Run "{PYTHON_EXE} " & script, 0, False
-'''
-
-#WRAPPER_PATH = (Path(INSTALL_DIR) / "ArchiveFeedback.vbs")
-#WRAPPER_PATH.write_text(wrapper, encoding="utf-8")
-
-
 subprocess.run(
     [
         "schtasks",
