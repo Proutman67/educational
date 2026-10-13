@@ -16,13 +16,12 @@ if %errorlevel% neq 0 (
 )
 
 REM ===== CHECK IF PYTHON EXISTS =====
-where pip >nul 2>&1
-if errorlevel 1 (
+if not exist "C:\Program Files\Python314\python.exe" (
     echo Python is NOT installed.
 ) else (
     echo Python is already installed.
-    python --version
-    pip --version
+    "C:\Program Files\Python314\python.exe" --version
+    "C:\Program Files\Python314\python.exe" -m pip --version
     goto :eof
 )
 
