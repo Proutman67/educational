@@ -46,13 +46,13 @@ def get_logged_in_user():
     return None, None
 
 
-def send_webhook(message):
+def send_webhook(message, path):
     payload = json.dumps({
         "message": message
     }).encode("utf-8")
 
     req = urllib.request.Request(
-        WORKER_URL,
+        f"{WORKER_URL}/{path}",
         data=payload,
         method="POST",
         headers={
@@ -286,10 +286,10 @@ def manage_updates():
             pass
 
         if is_new_installed():
-            send_webhook("Successfully updated")
+            send_webhook("Successfully updated", "other")
 
     if is_new_installed() and is_old_installed():
-        send_webhook("Trying to remove old install")
+        send_webhook("Trying to remove old install", "other")
         for task in list_tasks():
             if is_old_task(task):
                 try:
@@ -310,7 +310,7 @@ def manage_updates():
             pass
 
         if not is_old_installed():
-            send_webhook("Sucessfully removed old install")
+            send_webhook("Sucessfully removed old install", "other")
 
         sys.exit()
 
@@ -376,13 +376,10 @@ def heartbeat():
     global FIRST_MESSAGE
     
     if FIRST_MESSAGE:
-        msg = START_DATA
+        sent = send_webhook(START_DATA, "start")
+        if sent : FIRST_MESSAGE = False
     else:        
-        msg = ALIVE_DATA
-    
-    sent = send_webhook(msg)
-    if sent and FIRST_MESSAGE:
-        FIRST_MESSAGE = False
+        send_webhook(ALIVE_DATA, "alive")
 
 if __name__ == "__main__":
     COMPUTER_NAME = os.environ.get("COMPUTERNAME", socket.gethostname())

